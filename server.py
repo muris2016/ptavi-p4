@@ -14,7 +14,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
 
     def handle(self):
         # Escribe dirección y puerto del cliente (de tupla client_address)
-        print ("{} wrote:".format(self.client_address[0]))
+        print ("{} wrote:".format(self.client_address.join[0:1]))
         self.wfile.write(b"Hemos recibido tu peticion")
         while 1:
             # Leyendo línea a línea lo que nos envía el cliente
