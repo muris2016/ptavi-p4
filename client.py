@@ -14,7 +14,10 @@ if __name__ == "__main__":
     # Dirección IP del servidor.
     SERVER = (sys.argv[1])
     PORT = int(sys.argv[2])
-    MSG = ' '.join(a for a in sys.argv[3:])
+    if sys.argv[3] == 'register':
+        MSG = 'REGISTER sip:%s SIP/2.0\r\n\r\n' %(sys.argv[4])
+    else:
+        MSG = ' '.join(a for a in sys.argv[3:])
 
     # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
     my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
