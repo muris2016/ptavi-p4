@@ -25,7 +25,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                 del self.client_dicc[client]
 
     def register2json(self):
-        with open('json_file.json', 'w') as outfile:
+        with open('json_file.json', 'r') as outfile:
             json.dump(self.client_dicc, outfile, sort_keys=True, indent=4)
 
     def handle(self):
