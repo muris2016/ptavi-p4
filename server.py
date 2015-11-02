@@ -9,7 +9,7 @@ import sys
 import json
 import time
 
-DATE_F = '%Y-%m-%d %H:%M:%S'
+DATE_F = '%Y-%m-%d %H:%M:%S +0100'
 
 
 class SIPRegisterHandler(socketserver.DatagramRequestHandler):
@@ -44,7 +44,7 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                 json_str = outfile.read()
                 self.client_dict = json.loads(json_str)
         except:
-            pass
+            self.client_dict = {}
 
     def handle(self):
         """
@@ -55,7 +55,6 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
         IP = self.client_address[0]
         PORT = self.client_address[1]
         print (IP, PORT, "wrote:")
-
         while 1:
             line = self.rfile.read().decode('utf-8').split()
             if not line:
@@ -71,7 +70,8 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
                         self.client_dict[address] = {'address': IP,
                                                      'expires': exp_t}
                     else:
-                        del self.client_dict[address]
+                        if address in self.client_dict:
+                            del self.client_dict[address]
                     self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
                 else:
                     self.wfile.write(b"SIP/2.0 400 BAD REQUEST\r\n\r\n")
@@ -82,5 +82,5 @@ class SIPRegisterHandler(socketserver.DatagramRequestHandler):
 if __name__ == "__main__":
     PORT = int(sys.argv[1])
     serv = socketserver.UDPServer(('', PORT), SIPRegisterHandler)
-    print("Lanzando servidor UDP de eco...")
+    print("Throwing server UDP of SIP...")
     serv.serve_forever()
